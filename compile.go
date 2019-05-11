@@ -25,7 +25,11 @@ func compile() error {
 }
 
 type Transcript struct {
-	Results *TranscriptResult `json:"results"`
+	Results struct {
+		Transcripts []struct {
+			Transcript string `json:"transcript"`
+		} `json:"transcripts"`
+	} `json:"results"`
 }
 
 func (transcript *Transcript) CombinedTranscript() string {
@@ -34,14 +38,6 @@ func (transcript *Transcript) CombinedTranscript() string {
 		transcripts = append(transcripts, resultTranscript.Transcript)
 	}
 	return strings.Join(transcripts, " ")
-}
-
-type TranscriptResult struct {
-	Transcripts []*TranscriptResultTranscript `json:"transcripts"`
-}
-
-type TranscriptResultTranscript struct {
-	Transcript string `json:"transcript"`
 }
 
 func compileFile(file string) error {
