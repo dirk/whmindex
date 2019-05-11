@@ -11,7 +11,7 @@ import (
 )
 
 func compile() error {
-	files, err := filepath.Glob("data/transcripts/*.json")
+	files, err := filepath.Glob("_data/transcripts/*.json")
 	if err != nil {
 		return err
 	}
@@ -54,7 +54,7 @@ func compileFile(file string) error {
 	combinedTranscript := transcript.CombinedTranscript()
 	newlinedTranscript := newlineSentences(combinedTranscript)
 
-	outputFile := "data/episodes/" + strings.TrimSuffix(path.Base(file), ".json") + ".txt"
+	outputFile := "_data/episodes/" + strings.TrimSuffix(path.Base(file), ".json") + ".txt"
 	return ioutil.WriteFile(outputFile, []byte(newlinedTranscript+"\n"), os.ModePerm)
 }
 
