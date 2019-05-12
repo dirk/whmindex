@@ -2,9 +2,11 @@
 layout: default
 ---
 
-Transcript:
-<ul>
-  {% for line in page.transcript %}
-    <li data-line="{{ forloop.index }}">{{ line }}</li>
-  {% endfor %}
-</ul>
+<div class="page-episode">
+  Transcript:
+  <ul>
+    {% for line in page.transcript %}
+      <li data-line="{{ forloop.index }}">{{ line }}</li>
+    {% endfor %}
+  </ul>
+</div>

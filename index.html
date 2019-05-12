@@ -1,12 +1,14 @@
 ---
 ---
 
-{% for item in site.data.index %}
-  {% assign feed = item[0] %}
-  {% assign episodes = item[1] %}
-  <ul>
-    {% for episode in episodes %}
-    <li><a href="/{{ feed}}/{{ episode.number }}-{{ episode.title | slugify }}.html">{{ episode.number }}: {{ episode.title }}</a></li>
-    {% endfor %}
-  </ul>
-{% endfor %}
+<div class="page-index">
+  {% for item in site.data.index %}
+    {% assign feed = item[0] %}
+    {% assign episodes = item[1] %}
+    <ul>
+      {% for episode in episodes %}
+      <li><a href="/{{ feed}}/{{ episode.number }}-{{ episode.title | slugify }}.html">{{ episode.number }}: {{ episode.title }}</a></li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
+</div>
