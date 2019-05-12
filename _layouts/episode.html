@@ -3,4 +3,8 @@ layout: default
 ---
 
 Transcript:
-{{ page.transcript }}
+<ul>
+  {% for line in page.transcript %}
+    <li data-line="{{ forloop.index }}">{{ line }}</li>
+  {% endfor %}
+</ul>
