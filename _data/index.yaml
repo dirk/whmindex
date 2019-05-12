@@ -1,8 +1,8 @@
 main:
   - number: 157
     title: 'Abraxas, Guardian of the Universe'
-    source: 'whm-main-157-abraxas-guardian-of-the-universe.txt'
+    transcript: 'whm-main-157-abraxas-guardian-of-the-universe.txt'
 
   - number: 231
     title: 'Entourage'
-    source: 'whm-main-231-entourage.txt'
+    transcript: 'whm-main-231-entourage.txt'

@@ -18,7 +18,7 @@ module Jekyll
 
       process(name)
       read_yaml('_layouts', 'episode.html')
-      self.data['transcript'] = File.read("_data/episodes/#{episode['source']}").strip.split("\n")
+      self.data['transcript'] = File.read("_data/transcripts/#{episode['transcript']}").strip.split("\n")
     end
   end
 end
