@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script src="/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js" integrity="sha256-7/yoZS3548fXSRXqc/xYzjsmuW3sFKzuvOCHd06Pmps=" crossorigin="anonymous"></script>
   </head>
   <body>
     <main class="layout-content">
+      <div class="search-container">
+        <form>
+          <input type="search" />
+        </form>
+      </div>
       {{ content }}
     </main>
+    <script src="/js/main.js"></script>
   </body>
 </html>
