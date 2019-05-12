@@ -58,9 +58,10 @@ func compileFile(file string) error {
 	return ioutil.WriteFile(outputFile, []byte(newlinedTranscript+"\n"), os.ModePerm)
 }
 
+var newlineRegexp = regexp.MustCompile(`[.?!] `)
+
 func newlineSentences(transcript string) string {
-	re := regexp.MustCompile(`[.?!] `)
-	return re.ReplaceAllStringFunc(transcript, func(separator string) string {
+	return newlineRegexp.ReplaceAllStringFunc(transcript, func(separator string) string {
 		return strings.TrimSpace(separator) + "\n"
 	})
 }
