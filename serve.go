@@ -14,6 +14,14 @@ func handleSearch(res http.ResponseWriter, req *http.Request) {
 }
 
 func serve() error {
+	fmt.Printf("Building index...")
+	err := buildIndex()
+	if err != nil {
+		fmt.Printf("\n")
+		return err
+	}
+	fmt.Printf(" Done\n")
+
 	fileServer := http.FileServer(http.Dir("_site"))
 	http.Handle("/", fileServer)
 	http.HandleFunc("/api/search.json", handleSearch)
