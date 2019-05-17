@@ -4,6 +4,7 @@ import (
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"regexp"
+	"sort"
 	"strings"
 )
 
@@ -152,7 +153,7 @@ func parseQuery(input string) *Query {
 }
 
 type Result struct {
-	Matches []Match `json:"matches"`
+	Matches []*Match `json:"matches"`
 }
 
 type Match struct {
@@ -175,19 +176,22 @@ func NewMatchEpisode(episode *IndexEpisode) *MatchEpisode {
 }
 
 func executeSearch(index *Index, query *Query) Result {
-	matches := make([]Match, 0)
+	matches := make([]*Match, 0)
 	for _, episode := range index.Episodes {
 		score := 0
 		for _, line := range episode.Lines {
 			score += scoreLine(&line, query)
 		}
 		if score > 0 {
-			matches = append(matches, Match{
+			matches = append(matches, &Match{
 				Episode: NewMatchEpisode(episode),
 				Score:   score,
 			})
 		}
 	}
+	sort.Slice(matches, func(i, j int) bool {
+		return matches[i].Score > matches[j].Score
+	})
 	return Result{Matches: matches}
 }
 
