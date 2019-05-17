@@ -152,12 +152,26 @@ func parseQuery(input string) *Query {
 }
 
 type Result struct {
-	Matches []Match
+	Matches []Match `json:"matches"`
 }
 
 type Match struct {
-	Episode *IndexEpisode
-	Score   int
+	Episode *MatchEpisode `json:"episode"`
+	Score   int           `json:"score"`
+}
+
+type MatchEpisode struct {
+	Feed   string `json:"feed"`
+	Number int    `json:"number"`
+	Title  string `json:"title"`
+}
+
+func NewMatchEpisode(episode *IndexEpisode) *MatchEpisode {
+	return &MatchEpisode{
+		Feed:   episode.Feed,
+		Number: episode.Number,
+		Title:  episode.Title,
+	}
 }
 
 func executeSearch(index *Index, query *Query) Result {
@@ -169,7 +183,7 @@ func executeSearch(index *Index, query *Query) Result {
 		}
 		if score > 0 {
 			matches = append(matches, Match{
-				Episode: episode,
+				Episode: NewMatchEpisode(episode),
 				Score:   score,
 			})
 		}
