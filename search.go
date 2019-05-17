@@ -19,12 +19,13 @@ type DataIndexEntry struct {
 }
 
 type Index struct {
-	Episodes []IndexEpisode
+	Episodes []*IndexEpisode
 }
 
 type IndexEpisode struct {
 	Feed   string
 	Number int
+	Title  string
 	Lines  []IndexLine
 }
 
@@ -33,27 +34,28 @@ type IndexLine struct {
 	Words    map[string]int
 }
 
-func buildIndex() error {
+func buildIndex() (*Index, error) {
 	var dataIndex DataIndex
 	contents, err := ioutil.ReadFile("_data/index.yaml")
 	if err != nil {
-		return err
+		return nil, err
 	}
 	err = yaml.Unmarshal(contents, &dataIndex)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	var index Index
 	for _, dataIndexEntry := range dataIndex.Main {
 		contents, err = ioutil.ReadFile("_data/transcripts/" + dataIndexEntry.Transcript)
 		if err != nil {
-			return err
+			return nil, err
 		}
 
-		episode := IndexEpisode{
+		episode := &IndexEpisode{
 			Feed:   "main",
 			Number: dataIndexEntry.Number,
+			Title:  dataIndexEntry.Title,
 			Lines:  normalizeTranscriptForIndex(string(contents)),
 		}
 		index.Episodes = append(index.Episodes, episode)
@@ -61,8 +63,10 @@ func buildIndex() error {
 
 	// fmt.Printf("index: %#v\n", index)
 
-	return nil
+	return &index, nil
 }
+
+var spacesRegexp = regexp.MustCompile(`\s+`)
 
 func normalizeTranscriptForIndex(transcript string) []IndexLine {
 	lines := make([]IndexLine, 0)
@@ -73,7 +77,7 @@ func normalizeTranscriptForIndex(transcript string) []IndexLine {
 		}
 
 		words := make(map[string]int)
-		for _, word := range strings.Split(normalizedLine, " ") {
+		for _, word := range spacesRegexp.Split(normalizedLine, -1) {
 			if count, exists := words[word]; exists {
 				words[word] = count + 1
 			} else {
@@ -100,4 +104,86 @@ func normalizeLineForIndex(line string) string {
 		return ""
 	})
 	return withoutPunctuation
+}
+
+type Query struct {
+	// Single word terms (can use the `Words` frequency map in `Line`).
+	Words []string
+	// Phrases that must be substring searched in each line.
+	Phrases []string
+}
+
+var singleQuotedPhraseRegexp = regexp.MustCompile(`'[^']*'`)
+var doubleQuotedPhraseRegexp = regexp.MustCompile(`"[^"]*"`)
+var allNonWordOrSpaceRegexp = regexp.MustCompile(`[^A-Za-z0-9 ]`)
+
+func extractQuotedPhrases(input string, quotedPhraseRegexp *regexp.Regexp) (string, []string) {
+	phrases := make([]string, 0)
+	replaced := quotedPhraseRegexp.ReplaceAllStringFunc(input, func(match string) string {
+		phrases = append(phrases, match[1:len(match)-1])
+		return ""
+	})
+	return replaced, phrases
+}
+
+func parseQuery(input string) *Query {
+	// First normalize everything to lowercase.
+	input = strings.ToLower(input)
+
+	query := &Query{
+		Words:   make([]string, 0),
+		Phrases: make([]string, 0),
+	}
+
+	// Extract single- and double-quoted sequences into phrases.
+	var phrases []string
+	input, phrases = extractQuotedPhrases(input, singleQuotedPhraseRegexp)
+	query.Phrases = append(query.Phrases, phrases...)
+	input, phrases = extractQuotedPhrases(input, doubleQuotedPhraseRegexp)
+	query.Phrases = append(query.Phrases, phrases...)
+
+	// Remove all characters besides letters, numbers, and spaces.
+	input = allNonWordOrSpaceRegexp.ReplaceAllString(input, "")
+	input = strings.TrimSpace(input)
+	// Split on 1+ spaces.
+	query.Words = spacesRegexp.Split(input, -1)
+
+	return query
+}
+
+type Result struct {
+	Matches []Match
+}
+
+type Match struct {
+	Episode *IndexEpisode
+	Score   int
+}
+
+func executeSearch(index *Index, query *Query) Result {
+	matches := make([]Match, 0)
+	for _, episode := range index.Episodes {
+		score := 0
+		for _, line := range episode.Lines {
+			score += scoreLine(&line, query)
+		}
+		if score > 0 {
+			matches = append(matches, Match{
+				Episode: episode,
+				Score:   score,
+			})
+		}
+	}
+	return Result{Matches: matches}
+}
+
+func scoreLine(line *IndexLine, query *Query) int {
+	score := 0
+	for _, word := range query.Words {
+		if count, exists := line.Words[word]; exists {
+			score += count
+		}
+	}
+	// TODO: Check phrases if any.
+	return score
 }
