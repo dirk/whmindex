@@ -86,8 +86,8 @@ func serve() error {
 	router.HandleFunc("/api/search.json", handleError(handleApiSearch))
 	router.HandleFunc("/", handleError(handleIndex))
 	router.PathPrefix("/{feed:main}/{number:[0-9]+}").HandlerFunc(handleError(handleEpisode))
-	// fileServer := http.FileServer(http.Dir("_site"))
-	// router.PathPrefix("/").Handler(fileServer)
+	fileServer := http.FileServer(http.Dir("static"))
+	router.PathPrefix("/").Handler(fileServer)
 
 	port := 3000
 	fmt.Printf("Listening on %v...\n", port)
