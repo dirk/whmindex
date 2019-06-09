@@ -1,0 +1,15 @@
+{{template "layout_header.gohtml"}}
+
+<div class="page-index">
+  <ul>
+    {{range .Episodes}}
+      <li>
+        <a href="/{{.Feed}}/{{.Number}}">
+          {{.Number}}: {{.Title}}
+        </a>
+      </li>
+    {{end}}
+  </ul>
+</div>
+
+{{template "layout_footer.gohtml"}}

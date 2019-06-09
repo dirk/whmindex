@@ -3,8 +3,12 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	tmpl "html/template"
 	"net/http"
 	"os"
+	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 // Returns type of `error` but will actually always return `nil`. That way this
@@ -20,18 +24,33 @@ func respondJson(res http.ResponseWriter, code int, body string) error {
 }
 
 var index *Index
+var rootTemplate *tmpl.Template
 
-func handleSearch(res http.ResponseWriter, req *http.Request) error {
+func handleIndex(res http.ResponseWriter, _ *http.Request) error {
+	return rootTemplate.Lookup("index.gohtml").Execute(res, index)
+}
+
+func handleEpisode(res http.ResponseWriter, req *http.Request) error {
+	vars := mux.Vars(req)
+	feed := vars["feed"]
+	number, err := strconv.Atoi(vars["number"])
+	if err != nil {
+		return err
+	}
+	episode := index.FindEpisode(feed, number)
+	if episode == nil {
+		return fmt.Errorf("Episode not found (feed = %v, number = %v)", feed, number)
+	}
+	return rootTemplate.Lookup("episode.gohtml").Execute(res, episode)
+}
+
+func handleApiSearch(res http.ResponseWriter, req *http.Request) error {
 	input := req.FormValue("query")
 	if input == "" {
 		return respondJson(res, http.StatusUnprocessableEntity, `{"message":"Missing query"}`)
 	}
 	query := parseQuery(input)
-	// fmt.Printf("query: %#v\n", query)
-
 	result := executeSearch(index, query)
-	fmt.Printf("result: %#v\n", result)
-
 	body, err := json.Marshal(result)
 	if err != nil {
 		return err
@@ -59,11 +78,18 @@ func serve() error {
 	}
 	fmt.Printf(" Done\n")
 
-	fileServer := http.FileServer(http.Dir("_site"))
-	http.Handle("/", fileServer)
-	http.HandleFunc("/api/search.json", handleError(handleSearch))
+	fmt.Printf("Loading templates...")
+	rootTemplate = tmpl.Must(tmpl.ParseGlob("templates/*.gohtml"))
+	fmt.Printf(" Done\n")
+
+	router := mux.NewRouter()
+	router.HandleFunc("/api/search.json", handleError(handleApiSearch))
+	router.HandleFunc("/", handleError(handleIndex))
+	router.PathPrefix("/{feed:main}/{number:[0-9]+}").HandlerFunc(handleError(handleEpisode))
+	// fileServer := http.FileServer(http.Dir("_site"))
+	// router.PathPrefix("/").Handler(fileServer)
 
 	port := 3000
 	fmt.Printf("Listening on %v...\n", port)
-	return http.ListenAndServe(fmt.Sprintf(":%v", port), nil)
+	return http.ListenAndServe(fmt.Sprintf(":%v", port), router)
 }

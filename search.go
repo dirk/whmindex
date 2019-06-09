@@ -23,6 +23,15 @@ type Index struct {
 	Episodes []*IndexEpisode
 }
 
+func (index *Index) FindEpisode(feed string, number int) *IndexEpisode {
+	for _, episode := range index.Episodes {
+		if episode.Feed == feed && episode.Number == number {
+			return episode
+		}
+	}
+	return nil
+}
+
 type IndexEpisode struct {
 	Feed   string
 	Number int

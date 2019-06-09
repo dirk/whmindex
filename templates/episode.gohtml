@@ -1,0 +1,12 @@
+{{template "layout_header.gohtml"}}
+
+<div class="page-episode">
+  Transcript:
+  <ul>
+    {{range $index, $line := .Lines}}
+      <li data-line="{{$index}}">{{$line.Contents}}</li>
+    {{end}}
+  </ul>
+</div>
+
+{{template "layout_footer.gohtml"}}
