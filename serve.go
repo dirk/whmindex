@@ -14,7 +14,7 @@ func respondJson(res http.ResponseWriter, code int, body string) error {
 	res.WriteHeader(code)
 	_, err := res.Write([]byte(body))
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error writing response: %v\n", err)
+		_, _ = fmt.Fprintf(os.Stderr, "Error writing response: %v\n", err)
 	}
 	return nil
 }
@@ -43,8 +43,8 @@ func handleError(handler func(http.ResponseWriter, *http.Request) error) func(ht
 	return func(res http.ResponseWriter, req *http.Request) {
 		err := handler(res, req)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error handling request: %#v\n", err)
-			respondJson(res, http.StatusInternalServerError, `{"message":"Internal server error"}`)
+			_, _ = fmt.Fprintf(os.Stderr, "Error handling request: %#v\n", err)
+			_ = respondJson(res, http.StatusInternalServerError, `{"message":"Internal server error"}`)
 		}
 	}
 }
