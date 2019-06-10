@@ -15,10 +15,16 @@
             searchInput.parentElement.appendChild(searchResults)
           }
           if (result.matches.length > 0) {
-            const elements = result.matches.map(match => (
-              `<li>${match.episode.title}</li>`
-            ))
-            searchResults.innerHTML = `<ul>${elements.join('')}</ul>`
+            const elements = result.matches.slice(0, 5).map(match => {
+              const href = `/${match.episode.feed}/${match.episode.number}`
+              return `<li><a href="${href}">${match.episode.title}</a></li>`
+            })
+            searchResults.innerHTML = (
+              `<ul>${elements.join('')}</ul>` +
+              `<div class="all-results"><a href="/search?query=${encodeURIComponent(value)}">` +
+                `All results for "${value}" »` +
+              '</a></div>'
+            )
           } else {
             searchResults.innerHTML = 'No results found.'
           }
