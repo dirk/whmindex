@@ -44,6 +44,18 @@ func handleEpisode(res http.ResponseWriter, req *http.Request) error {
 	return rootTemplate.Lookup("episode.gohtml").Execute(res, episode)
 }
 
+func handleSearch(res http.ResponseWriter, req *http.Request) error {
+	input := req.FormValue("query")
+	if input == "" {
+		res.Header().Set("Location", "/")
+		res.WriteHeader(302)
+		return nil
+	}
+	query := parseQuery(input)
+	result := executeSearch(index, query)
+	return rootTemplate.Lookup("search.gohtml").Execute(res, result)
+}
+
 func handleApiSearch(res http.ResponseWriter, req *http.Request) error {
 	input := req.FormValue("query")
 	if input == "" {
@@ -85,6 +97,7 @@ func serve() error {
 	router := mux.NewRouter()
 	router.HandleFunc("/api/search.json", handleError(handleApiSearch))
 	router.HandleFunc("/", handleError(handleIndex))
+	router.HandleFunc("/search", handleError(handleSearch))
 	router.PathPrefix("/{feed:main}/{number:[0-9]+}").HandlerFunc(handleError(handleEpisode))
 	fileServer := http.FileServer(http.Dir("static"))
 	router.PathPrefix("/").Handler(fileServer)

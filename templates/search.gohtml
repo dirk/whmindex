@@ -1,0 +1,15 @@
+{{template "layout_header.gohtml"}}
+
+<div class="page-search">
+  <ul>
+    {{range .Matches}}
+      <li>
+        <a href="/{{.Episode.Feed}}/{{.Episode.Number}}">
+            {{.Episode.Number}}: {{.Episode.Title}}
+        </a>
+      </li>
+    {{end}}
+  </ul>
+</div>
+
+{{template "layout_footer.gohtml"}}
