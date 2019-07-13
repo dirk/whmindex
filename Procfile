@@ -1,0 +1,1 @@
+web: ./whmindex serve
