@@ -108,7 +108,11 @@ func serve() error {
 	fileServer := http.FileServer(http.Dir("static"))
 	router.PathPrefix("/").Handler(fileServer)
 
-	port := 3000
-	fmt.Printf("Listening on %v...\n", port)
-	return http.ListenAndServe(fmt.Sprintf(":%v", port), router)
+	address := ":3000"
+	port := os.Getenv("PORT")
+	if port != "" {
+		address = fmt.Sprintf(":%v", port)
+	}
+	fmt.Printf("Listening on %v...\n", address)
+	return http.ListenAndServe(address, router)
 }
