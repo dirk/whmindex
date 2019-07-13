@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"regexp"
@@ -159,6 +160,17 @@ func parseQuery(input string) *Query {
 	query.Words = spacesRegexp.Split(input, -1)
 
 	return query
+}
+
+func (query *Query) Display() string {
+	parts := make([]string, 0)
+	for _, word := range query.Words {
+		parts = append(parts, word)
+	}
+	for _, phrase := range query.Phrases {
+		parts = append(parts, fmt.Sprintf("\"%v\"", phrase))
+	}
+	return strings.Join(parts, " ")
 }
 
 type Result struct {

@@ -53,7 +53,13 @@ func handleSearch(res http.ResponseWriter, req *http.Request) error {
 	}
 	query := parseQuery(input)
 	result := executeSearch(index, query)
-	return rootTemplate.Lookup("search.gohtml").Execute(res, result)
+	return rootTemplate.Lookup("search.gohtml").Execute(res, struct {
+		Query  *Query
+		Result Result
+	}{
+		query,
+		result,
+	})
 }
 
 func handleApiSearch(res http.ResponseWriter, req *http.Request) error {

@@ -1,13 +1,16 @@
 {{template "layout_header.gohtml"}}
 
 <div class="page-search">
+  <h2>Results for “{{.Query.Display}}”</h2>
   <ul>
-    {{range .Matches}}
-      <li>
-        <a href="/{{.Episode.Feed}}/{{.Episode.Number}}">
-            {{.Episode.Number}}: {{.Episode.Title}}
-        </a>
-      </li>
+    {{with .Result}}
+      {{range .Matches}}
+        <li>
+          <a href="/{{.Episode.Feed}}/{{.Episode.Number}}">
+              {{.Episode.Number}}: {{.Episode.Title}}
+          </a>
+        </li>
+      {{end}}
     {{end}}
   </ul>
 </div>
