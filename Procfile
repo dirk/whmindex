@@ -1,1 +1,1 @@
-web: ./whmindex serve
+web: ./bin/whmindex serve
