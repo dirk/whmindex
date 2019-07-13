@@ -5,6 +5,16 @@
   if (searchInput) {
     const handleChange = _.debounce((event) => {
       const value = searchInput.value.trim()
+
+      // If they cleared the form then hide the results.
+      if (value === '') {
+        const searchResults = document.querySelector('.search-container .results')
+        if (searchResults) {
+          searchResults.remove()
+        }
+        return
+      }
+
       fetch(`/api/search.json?query=${encodeURIComponent(value)}`)
         .then(response => response.json())
         .then(result => {
