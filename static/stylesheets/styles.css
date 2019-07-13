@@ -18,6 +18,10 @@ body {
 .layout-header {
   padding: 32px 0 0;
 }
+.layout-header a {
+  color: inherit;
+  text-decoration: none;
+}
 .layout-header h1 {
   margin: 0;
 }
