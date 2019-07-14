@@ -14,3 +14,7 @@ main:
   - number: 280
     title: 'The Santa Clause 3: The Escape Clause'
     transcript: 'whm-main-280-the-santa-clause-3-the-escape-clause.txt'
+
+  - number: 287
+    title: 'Bee Movie'
+    transcript: 'whm-main-287-bee-movie.txt'
