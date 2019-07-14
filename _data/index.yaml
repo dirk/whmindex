@@ -3,6 +3,14 @@ main:
     title: 'Abraxas, Guardian of the Universe'
     transcript: 'whm-main-157-abraxas-guardian-of-the-universe.txt'
 
+  - number: 166
+    title: 'The Day After Tomorrow'
+    transcript: 'whm-main-166-the-day-after-tomorrow.txt'
+
   - number: 231
     title: 'Entourage'
     transcript: 'whm-main-231-entourage.txt'
+
+  - number: 280
+    title: 'The Santa Clause 3: The Escape Clause'
+    transcript: 'whm-main-280-the-santa-clause-3-the-escape-clause.txt'
