@@ -7,6 +7,14 @@ main:
     title: 'The Day After Tomorrow'
     transcript: 'whm-main-166-the-day-after-tomorrow.txt'
 
+  - number: 185
+    title: 'I, Frankenstein'
+    transcript: 'whm-main-185-i-frankenstein.txt'
+
+  - number: 188
+    title: 'Sabotage'
+    transcript: 'whm-main-188-sabotage.txt'
+
   - number: 231
     title: 'Entourage'
     transcript: 'whm-main-231-entourage.txt'
