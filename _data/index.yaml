@@ -19,6 +19,10 @@ main:
     title: 'Entourage'
     transcript: 'whm-main-231-entourage.txt'
 
+  - number: 237
+    title: 'The Watcher'
+    transcript: 'whm-main-237-the-watcher.txt'
+
   - number: 280
     title: 'The Santa Clause 3: The Escape Clause'
     transcript: 'whm-main-280-the-santa-clause-3-the-escape-clause.txt'
@@ -26,3 +30,7 @@ main:
   - number: 287
     title: 'Bee Movie'
     transcript: 'whm-main-287-bee-movie.txt'
+
+  - number: 298
+    title: 'Hot to Trot'
+    transcript: 'whm-main-298-hot-to-trot.txt'
