@@ -1,4 +1,8 @@
 main:
+  - number: 44
+    title: 'Star Wars- Episode I - The Phantom Menace'
+    transcript: 'whm-main-44-star-wars-episode-i-the-phantom-menace.txt'
+
   - number: 157
     title: 'Abraxas, Guardian of the Universe'
     transcript: 'whm-main-157-abraxas-guardian-of-the-universe.txt'
@@ -34,3 +38,11 @@ main:
   - number: 298
     title: 'Hot to Trot'
     transcript: 'whm-main-298-hot-to-trot.txt'
+
+  - number: 431
+    title: 'The Ugly Truth'
+    transcript: 'whm-main-431-the-ugly-truth.txt'
+
+  - number: 433
+    title: 'The Taking of Pelham 123 (2009)'
+    transcript: 'whm-main-433-the-taking-of-pelham-123-2009.txt'
