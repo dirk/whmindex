@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <title>
+      WHM Index
+      {{- if .Title -}}
+        {{" - "}}{{.Title}}
+      {{- end}}
+    </title>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js" integrity="sha256-7/yoZS3548fXSRXqc/xYzjsmuW3sFKzuvOCHd06Pmps=" crossorigin="anonymous"></script>
     <link href="/stylesheets/styles.css" rel="stylesheet" media="screen" />
   </head>
